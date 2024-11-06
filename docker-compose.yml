@@ -1,0 +1,41 @@
+name: segwise-app
+
+services:
+  mongo:
+    image: mongo:7.0.12
+    ports:
+      - 27018:27017
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - segwise-app
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - 7001:7001
+    networks:
+      - segwise-app
+    depends_on:
+      - mongo
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    ports:
+      - 5173:5173
+    command: npm run dev -- --host
+    networks:
+      - segwise-app
+    depends_on:
+      - api
+volumes:
+  mongo_data:
+
+networks:
+  segwise-app:
+    driver: bridge

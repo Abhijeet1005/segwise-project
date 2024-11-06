@@ -1,0 +1,7 @@
+FROM llama3.2
+
+Parameter temperature 1
+
+SYSTEM """
+I will send you reviews and just respond with a single word from (Bugs,Complaints,Crashes,Praises,Other) according to what type of review it is.
+"""
